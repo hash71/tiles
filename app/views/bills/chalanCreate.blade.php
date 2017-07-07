@@ -1,0 +1,350 @@
+@extends('layouts.default.default')
+@section('returnProduct')
+    <div id="page-title">
+        <h3>Chalan Bill</h3>
+    </div><!-- #page-title -->
+
+    <div id="page-content">
+        <div class="example-box">
+            <div class="example-code">
+                <div class="row">
+
+                    <div class="col-lg-12">
+
+                      @if(Session::has('error'))
+                      <div class="infobox infobox-close-wrapper error-bg" style="margin-bottom: 10px;">
+                          <a href="#" title="Close Message" class="glyph-icon infobox-close icon-remove"></a>
+                          <div class="bg-red large btn info-icon">
+                              <i class="glyph-icon icon-remove"></i>
+                          </div>
+                          <h4 class="infobox-title">Something went wrong!</h4>
+                          <p>{{Session::get('error')}}</p>
+                      </div>
+                      @endif
+
+
+                        <form name="get-bill" action="{{ URL::to('chalan/transaction') }}" method="post"
+                              onsubmit="return validate();">
+                            <div id="bill">
+                                <div class="form-bordered">
+                                    <div class="form-row">
+                                        <div class="form-label col-md-3">
+                                            <label for="">
+                                                Bill No:
+                                            </label>
+                                        </div>
+                                        <div class="form-input col-md-3">
+                                            <select id="bill_id" name="name" class="chosen-select">
+                                                <option value="-1">--Select a bill--</option>
+                                                @foreach($bills as $bill)
+                                                    <option>{{$bill}}</option>
+                                                @endforeach
+
+                                            </select>
+                                        </div>
+                                        <div class="form-label col-md-3">
+                                            <label for="">
+                                                Payment Due:
+                                            </label>
+                                        </div>
+                                        <div class="form-label col-md-3">
+                                            <label id="oldDue">
+                                                0
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-row">
+                                      <div class="form-label col-md-3">
+                                          <label for="">
+                                              Bill Date:
+                                          </label>
+                                      </div>
+                                      <div class="form-label col-md-3">
+                                          <label id="bill_date">
+
+                                          </label>
+                                      </div>
+
+                                      <div class="form-label col-md-3">
+                                          <label for="">
+                                              Reference Chalan ID:
+                                          </label>
+                                      </div>
+                                      <div class="form-input col-md-3">
+                                          <input type="text" name="ref_chalan_id" id="refChalanId" value="" required />
+                                      </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="bill-info">
+                                <h3 class="content-box-header bg-green">
+                                    <span class="">Products Information</span>
+                                </h3>
+                                <div class="form-bordered">
+
+                                    <div class="single-product">
+                                        <div class="form-row">
+                                            <div class="form-label col-md-2">
+                                                <label>
+                                                    Product Code:
+                                                </label>
+                                            </div>
+                                            <div class="form-input col-md-2">
+                                                <input class="product_code_field" type="text" min="0" name="code0" id="code" value="0"
+                                                       readonly="true"/>
+                                            </div>
+                                            <div class="form-label col-md-1" style="padding: 10px 0px;">
+                                                <label>
+                                                    Unit Size:
+                                                </label>
+                                            </div>
+                                            <div class="form-input col-md-1">
+                                                <input type="text" min="0" name="size0" id="size" value=""
+                                                       readonly="true" style="padding: 0px 5px;"/>
+                                            </div>
+                                            <div class="form-label col-md-1" style="padding: 10px 0px;">
+                                                <label for="">
+                                                    Rate(sft):
+                                                </label>
+                                            </div>
+                                            <div class="form-input col-md-1">
+                                                <input type="number" min="0" name="rate0" id="rate" value="0"
+                                                       readonly="true" style="padding: 0px 5px;"/>
+                                            </div>
+                                            <div class="form-label col-md-2">
+                                                <label for="">
+                                                    Total(Piece):
+                                                </label>
+                                            </div>
+                                            <div class="form-input col-md-2">
+                                                <input type="number" min="0" name="totalpiece0" id="totalpiece" value="0"
+                                                       readonly="true"/>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-label col-md-2">
+                                                <label>
+                                                    Remaining(Pieces):
+                                                </label>
+                                            </div>
+                                            <div class="form-input col-md-2">
+                                                <input type="number" min="0" name="remainpiece0" id="remainpiece" value="0"
+                                                       readonly="true"/>
+                                            </div>
+                                            <div class="form-label col-md-1" style="padding: 10px 0px;">
+                                                <label for="" style="font-style: italic">
+                                                    PIECES:
+                                                </label>
+                                            </div>
+                                            <div class="form-input col-md-2">
+                                                <input class="billpiece" type="number" min="0" name="productqty0"
+                                                       id="productqty" value="0" required/>
+                                            </div>
+                                            <div class="form-label col-md-1 col-md-offset-2">
+                                                <label for="" style="font-style: italic">
+                                                    SFT:
+                                                </label>
+                                            </div>
+                                            <div class="form-input col-md-2">
+                                                <input class="product_sft" type="number" min="0" name="productsft0"
+                                                       id="productsft" value="0" readonly="true" required/>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="form-row pad10A">
+                                <div class="form-row col-md-4 col-md-offset-8 ">
+                                    <div class="form-label col-md-8">
+                                        <input type="submit" value="Submit" class="btn primary-bg medium">
+                                    </div>
+                                    <a href="#" class="btn medium bg-gray col-md-4" title="">
+                                        <span class="button-content"> Cancel</span>
+                                    </a>
+                                </div>
+                            </div>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+
+    <script>
+        var remainingprod = <?php echo json_encode($remain_at_stock); ?>;
+
+        function validate() {
+            //console.log("on the validate");
+            var selected_bill = $('#bill_id').val();
+            if (selected_bill == -1) {
+                alert("Please Select a Bill!");
+                return false;
+            }
+
+            $warning = '<div class="warning" style="color: red; font-size: 10px;">Not enough product in stock</div>';
+
+            var enough_product = true;
+            $('.single-product').not(":first").each(function(index){
+                $product = $(this).find('.product_code_field').val();
+                $product_amount = $(this).find('.product_sft').val();
+
+                $(this).find('.warning').remove();
+
+                if($product_amount > remainingprod[$product])
+                {
+                  $(this).find('.product_sft').closest('div').append($warning);
+                  enough_product = false;
+                }
+            });
+
+            if(enough_product == false)
+            {
+              return false;
+            }
+
+            $('input[type=submit]').attr('disabled', true);
+            return true;
+        }
+    </script>
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            $('input[type=submit]').click(function (event) {
+                //fill empty number fields with 0
+                $('input[type=number]').each(function () {
+
+                    if ($(this).val() == "") //check for NaN
+                        $(this).val(0);
+                });
+            });
+
+            function doIt() {
+                var sum = 0;
+
+                $('.single-product').each(function (k, v) {
+
+                    if (k > 0) {
+
+                        var ret = document.getElementById('productsft' + k).value;
+
+                        var rate = document.getElementById('rate' + k).value;
+
+                        sum += parseFloat(ret) * parseFloat(rate);
+                    }
+
+                });
+                if (parseInt(($('#oldDue').text()) - sum) < 0) {
+                    $('#back').val(sum - parseInt($('#oldDue').text()));
+                    $('#due').val(0);
+                } else {
+                    $('#due').val(parseInt(($('#oldDue').text()) - sum));
+                    $('#back').val(0);
+                }
+
+            }
+
+            function getSize(text) {
+                var s_size = text.split("X");
+                var xx = s_size[0];
+                var yy = s_size[1];
+                var unit_sft = (xx * yy) / 144.0;
+                return unit_sft;
+                //console.log(unit_sft);
+            }
+
+            $('#productqty').keyup(function (event) {
+                var prod_id = event.target.id;
+                var id_number = prod_id.replace(/[^\d.]/g, '');
+
+                var prod_qty = $('#productqty' + id_number).val();
+                var unit = getSize($('#size' + id_number).val());
+                //console.log(unit);
+                var qty = $(this).val();
+                var totsft = qty * unit;
+                $('#productsft' + id_number).val(totsft.toFixed(3));
+
+                doIt(); //updating new Due and Moneyback
+            });
+
+
+            $('#bill_id').on('change', function (e) {
+
+                e.preventDefault();
+
+                var check = $("#bill_id").val();
+                if (check == -1) {
+                    $('#bill_date').text("");
+                    $('#oldDue').text("0");
+                    $('#due').val(0);
+                    $('#back').val(0);
+                    $('.single-product').slice(1).remove();
+                    $('.single-product:first').show();
+                    return;
+                }
+
+
+                var value = $("#bill_id option:selected").text();
+
+                // var value = {a:10,b:"chaterbal"};
+
+                var billId = parseInt(value);
+
+                var bill = {id: billId};
+
+                $.post('../rat', {id: billId, type: "chalan"}, function (data) {
+
+                    var s = data[0]['bill_date'].split(" ");
+                    $('#bill_date').text(s[0]);
+                    $('#oldDue').text(data[2]);
+                    $('#due').val(data[2]);
+
+                    var totalproduct = 0;
+
+                    $('.single-product').slice(1).remove();
+                    $first = $('.single-product:first');
+
+                    $.each(data[1], function (k, v) {
+                        $first.show();
+                        $('.single-product:last').clone(true).insertAfter(".single-product:last");
+                        ++totalproduct;
+                        $div = $('.single-product:last');
+                        $div.find("*[name]").each(function () {
+                            $(this).attr("name", $(this).attr("name").replace(/\d/g, "") + totalproduct);
+                        });
+                        $div.find("*[id]").each(function () {
+                            $(this).attr("id", $(this).attr("id").replace(/\d/g, "") + totalproduct);
+                        });
+
+
+                        $('#code' + totalproduct).val(data[1][k]['product_code']);
+                        $('#rate' + totalproduct).val(data[1][k]['unit_sale_price']);
+                        $('#remainpiece' + totalproduct).val(data[1][k]['total_piece']);
+                        $('#totalpiece' + totalproduct).val(data[1][k]['total_piece_ordered']);
+
+                        $div.find('.billpiece').prop('max',data[1][k]['total_piece']);
+
+                        $.each(data[3], function (p, q) {
+
+                            if (data[3][p]['product_code'] == data[1][k]['product_code']) {
+
+                                $('#size' + totalproduct).val(data[3][p]['unit_product_size']);
+
+                            }
+                        });
+
+                    });
+                    $first.hide();
+                })
+            });
+        });
+
+    </script>
+
+@stop

@@ -1,0 +1,39 @@
+#hiderow,
+.delete {
+  display: none;
+}
+
+body{
+	font-size: 12px;
+}
+
+.table td{
+	padding: 1px 7px;
+}
+
+
+.no-print, .no-print *
+{
+    display: none !important;
+}
+
+select{
+	-moz-appearance: none;
+	-webkit-appearance: none;
+	appearance: none;
+}
+
+@page { margin: 10px 30px; }
+#page-wrap { padding: 1.6cm; }
+
+#page-title{
+	padding-bottom: 0px;
+}
+#page-title h3{
+	font-size: 20px;
+	margin-left: 40%;
+}
+
+.totaltable{
+	margin-top: -20px;
+}

@@ -1,0 +1,1 @@
+C:\xampp\htdocs\tiles\app/views/lcs/create.blade.php
